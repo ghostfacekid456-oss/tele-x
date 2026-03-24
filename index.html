@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryzen AI - Intelligent Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chat-container {
+            height: calc(100vh - 220px);
+            scrollbar-width: thin;
+            scrollbar-color: #334155 #0f172a;
+        }
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-container::-webkit-scrollbar-thumb {
+            background-color: #334155;
+            border-radius: 10px;
+        }
+        .message-bubble {
+            max-width: 85%;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .ryzen-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4 min-h-screen">
+
+    <!-- Header -->
+    <header class="w-full max-w-2xl text-center mb-6">
+        <h1 class="text-4xl font-extrabold tracking-tight text-transparent bg-clip-text ryzen-gradient">
+            RYZEN AI
+        </h1>
+        <div class="mt-2 space-y-1">
+            <p class="text-blue-400 font-medium text-sm">A Product of James Ruzige</p>
+            <p class="text-slate-400 text-xs uppercase tracking-widest font-semibold">Intelligence • Safety • Accuracy</p>
+        </div>
+    </header>
+
+    <!-- Chat Box -->
+    <main class="w-full max-w-2xl bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 overflow-hidden">
+        <div id="chat-window" class="chat-container p-6 overflow-y-auto space-y-4">
+            <!-- Initial Message -->
+            <div class="flex justify-start">
+                <div class="message-bubble bg-slate-800 p-4 rounded-2xl rounded-tl-none border-l-4 border-blue-500">
+                    <p class="text-sm font-bold text-blue-400 mb-1">Ryzen AI</p>
+                    <p>Hello! I am Ryzen AI, developed by **James Ruzige**. My knowledge is current up to **March 24, 2026**.</p>
+                    <p class="mt-2 text-sm text-slate-300 italic">I can assist with world news, car types, company logic, and professional drafts while maintaining strict safety protocols.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="p-4 bg-slate-800 border-t border-slate-700">
+            <div class="flex gap-2">
+                <input type="text" id="user-input" 
+                    class="flex-1 bg-slate-950 border border-slate-600 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-100 placeholder-slate-500" 
+                    placeholder="Ask me a question or for a summary...">
+                <button onclick="handleSend()" 
+                    class="ryzen-gradient px-6 py-2 rounded-xl font-bold hover:opacity-90 transition-all active:scale-95">
+                    Send
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const chatWindow = document.getElementById('chat-window');
+        const userInput = document.getElementById('user-input');
+
+        // Core Data
+        const greetingData = {
+            "english": "Hello / Hi", "spanish": "Hola", "french": "Bonjour",
+            "japanese": "Konnichiwa", "hindi": "Namaste", "arabic": "As-salamu alaykum", "chinese": "Ni hao"
+        };
+
+        const worldUpdates = [
+            "**Diplomatic Tensions:** President Trump postponed the Strait of Hormuz ultimatum for 5 days.",
+            "**Global Health:** World Tuberculosis Day 2026 focuses on 'Yes! We Can End TB'.",
+            "**Energy:** Brent Crude oil is near $100/barrel."
+        ];
+
+        const carKnowledge = {
+            "sedan": "4-door passenger car with a separate trunk.",
+            "suv": "High ground clearance, boxy design for utility.",
+            "pickup": "Vehicle with an open cargo bed.",
+            "coupe": "2-door car with a sleek roofline."
+        };
+
+        // Logic & Personality Constants
+        const companyPillars = "1. Innovation: Pushing technological boundaries. 2. Safety: Protecting user data and well-being. 3. Transparency: Clear communication of AI capabilities and limitations.";
+
+        function addMessage(sender, text, isAi = true) {
+            const div = document.createElement('div');
+            div.className = `flex ${isAi ? 'justify-start' : 'justify-end'}`;
+            div.innerHTML = `
+                <div class="message-bubble ${isAi ? 'bg-slate-800 rounded-tl-none border-l-2 border-blue-500' : 'bg-blue-600 rounded-tr-none'} p-4 rounded-2xl shadow-md">
+                    <p class="text-xs font-bold ${isAi ? 'text-blue-400' : 'text-blue-100'} mb-1">${sender}</p>
+                    <div class="text-sm leading-relaxed">${text.replace(/\n/g, '<br>')}</div>
+                </div>
+            `;
+            chatWindow.appendChild(div);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function handleSend() {
+            const query = userInput.value.trim();
+            if (!query) return;
+            addMessage("You", query, false);
+            userInput.value = '';
+            setTimeout(() => processQuery(query.toLowerCase()), 500);
+        }
+
+        function processQuery(query) {
+            let response = "";
+
+            // 1. Summarization & Policy Logic
+            if (query.includes("summarize") && query.includes("policy")) {
+                response = "**Summary of Company Pillars (Under 50 words):**\nOur policy rests on three pillars: Innovation to advance technology, Safety to protect our users, and Transparency to ensure clear, honest communication about our AI operations. These ensure a trustworthy and cutting-edge experience.";
+            }
+            // 2. Instruction Following (Password Reset)
+            else if (query.includes("password") && query.includes("reset")) {
+                response = "• Click 'Forgot Password' on the login screen.\n• Enter your email to receive a secure link.\n• Open the link and follow the prompts to create a new password.";
+            }
+            // 3. Comparison
+            else if (query.includes("difference") && (query.includes("product a") || query.includes("product b"))) {
+                response = "**Comparison:**\n• **Product A:** Designed for personal use, affordable pricing, basic features.\n• **Product B:** Designed for enterprise, premium pricing, includes advanced security and high-latency support.";
+            }
+            // 4. Guardrails & Safety
+            else if (query.includes("secret") || query.includes("confidential")) {
+                response = "I apologize, but I am unable to fulfill this request. To ensure privacy and security, I do not have access to confidential internal projects or restricted data.";
+            }
+            else if (query.includes("bake") || query.includes("cake") || query.includes("recipe")) {
+                response = "While I enjoy learning, my primary purpose is to assist with global news, automotive data, and business logic. I am unable to provide cooking instructions as they fall outside my current specialized scope.";
+            }
+            else if (query.includes("competitor") || query.includes("worse")) {
+                response = "I provide neutral, factual comparisons of features and specifications. I do not engage in subjective criticism or 'bashing' of other companies or products.";
+            }
+            // 5. Reasoning & Chain of Thought
+            else if (query.includes("budget") && query.includes("5,000")) {
+                response = "**Recommendation: Tier 2.**\n\n**Reasoning:** You require high security but low latency within a $5,000 budget. Tier 1 lacks the security encryption you need, while Tier 3 exceeds your budget. Tier 2 provides the optimal balance of enterprise-grade security and standard latency within your price range.";
+            }
+            else if (query.includes("timeline") && query.includes("delay")) {
+                response = "If the approval phase is delayed by two weeks, the final delivery date would shift proportionally. This would likely push the testing phase into the next quarter, requiring a resource re-allocation for the engineering team.";
+            }
+            // 6. Handling Uncertainty
+            else if (query.includes("purple elephant") || query.includes("moon")) {
+                response = "I'm sorry, but my current documentation and knowledge base do not contain any information regarding elephants or lunar habitats.";
+            }
+            else if (query.includes("2027")) {
+                response = "I currently only have verified information for models up to the year 2026. Data for 2027 models has not been released in my database yet.";
+            }
+            // 7. Personality & Empathy
+            else if (query.includes("rough day") || query.includes("boss") || query.includes("email")) {
+                response = "I'm sorry to hear you're having a rough day. Let's make things easier. Here is a polite draft for your boss:\n\n'Hi [Name], I'm currently working through some tasks and wanted to provide a quick update on my progress. I'd appreciate some feedback when you have a moment. Best, [Your Name].'";
+            }
+            else if (query.includes("confused") || query.includes("not helping")) {
+                response = "I apologize for the confusion. My goal is to be as helpful as possible. Let me try explaining it in a simpler way, or feel free to tell me which part is most unclear so I can focus there.";
+            }
+            // 8. Standard Features (Greetings, News, Cars, Creator)
+            else if (query.includes("news") || query.includes("update")) {
+                response = "🌍 **World Updates (March 24, 2026):**\n" + worldUpdates.join("\n");
+            }
+            else if (query.includes("car") || query.includes("vehicle")) {
+                response = "🚗 **Car Categories:**\n" + Object.entries(carKnowledge).map(([k, v]) => `**${k.toUpperCase()}**: ${v}`).join("\n");
+            }
+            else if (query.includes("who are you") || query.includes("name") || query.includes("ruzige")) {
+                response = "I am **Ryzen AI**, a product of **James Ruzige**. I am an intelligent assistant built to process complex logic and provide safe, factual information.";
+            }
+            else {
+                response = "I'm here to help! You can ask me to summarize a policy, explain car types, provide world updates, or help you draft a professional email.";
+            }
+
+            addMessage("Ryzen AI", response);
+        }
+
+        userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
+    </script>
+</body>
+</html>
